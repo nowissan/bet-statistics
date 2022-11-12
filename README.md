@@ -35,7 +35,7 @@ To make this possible, the power of smart contracts and Chainlink are needed.
 
 <br>
 <br>
-![Bet-Statistics system diagram](/assets/images/system-diagram.png)
+![Bet Statistics system diagram](./assets/images/system-diagram.png)
 <br>
 <br>
 
