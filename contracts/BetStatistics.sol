@@ -17,6 +17,7 @@ contract BetStatistics is ChainlinkClient, ConfirmedOwner {
     uint256 private fee;
 
     uint256 private s_BET_AMOUNT;
+    uint8 private s_lastRate;
     // uint256 private immutable i_MINIMUM_BET = 10000000000000000; // [TODO]
     address private immutable i_owner;
     // address private s_UPKEEP_NODE;
@@ -92,6 +93,7 @@ contract BetStatistics is ChainlinkClient, ConfirmedOwner {
         emit RequestFirstValue(_requestId, _rate);
 
         uint8 unemploymentRate = uint8(_rate);
+        s_lastRate = unemploymentRate;
         // uint8 unemploymentRate = removePosition(_rate);
         uint256 rewardPerPerson = calculateReward(unemploymentRate);
         // sendReward(unemploymentRate, rewardPerPerson);
@@ -108,7 +110,7 @@ contract BetStatistics is ChainlinkClient, ConfirmedOwner {
                 .call{value: reward}("");
             require(success, "transfer failed");
         }
-        clearForecasters();
+        // clearForecasters(); // expensive? with this feature
     }
 
     function calculateReward(uint8 actualRate) private view returns (uint256) {
@@ -153,7 +155,7 @@ contract BetStatistics is ChainlinkClient, ConfirmedOwner {
         }
     }*/
 
-    function clearForecasters() private {
+    function clearForecasters() public onlyOwner {
         // make the s_forecasterByValue empty
         for (uint8 i = 0; i < 250; i++) {
             // s_forecastersByValue[i] = new forecastor[](0);
@@ -175,37 +177,32 @@ contract BetStatistics is ChainlinkClient, ConfirmedOwner {
         );
     }
 
-    /*
-    // convert float string to integer: 3.6 => 36
-    function removePosition(string memory _string)
-        internal
-        pure
-        returns (uint8)
-    {
-        uint val = 0;
-        bytes memory _stringBytes = bytes(_string);
-        bytes memory result = new bytes(_stringBytes.length - 1);
-        uint j = 0;
-        for (uint i = 0; i < _stringBytes.length; i++) {
-            if (_stringBytes[i] != ".") {
-                result[j] = _stringBytes[i];
-                uint exp = result.length - j;
-                bytes1 ival = result[j];
-                uint8 uval = uint8(ival);
-                uint jval = uval - uint(0x30);
-
-                val += (uint(jval) * (10**(exp - 1)));
-
-                j++;
-            }
-        }
-
-        return uint8(val);
-    }*/
-
     function withdraw() public onlyOwner {
         (bool success, ) = i_owner.call{value: address(this).balance}("");
         require(success);
+    }
+
+    function getLastUnemploymentRate() public view returns (uint8) {
+        return s_lastRate;
+    }
+
+    function setEntranceFee(uint256 _bet_amount) public onlyOwner {
+        s_BET_AMOUNT = _bet_amount;
+    }
+
+    function getEntranceFee() public view returns (uint256) {
+        return s_BET_AMOUNT;
+    }
+
+    //[TODO] these variables should be defined as global. temporarily this should be set through function for gas price reason
+    function getNumberOfLastWinners() public view returns (uint256) {
+        return s_forecastersByValue[s_lastRate].length;
+    }
+
+    function getLastRewardPerPerson() public view returns (uint256) {
+        // [TODO] after the balance is transfered, this calculation is invalid
+        uint256 rewardPerPerson = calculateReward(s_lastRate);
+        return rewardPerPerson;
     }
 
     // function updateBetAmount(uint256 _bet_amount) public onlyOnwer {
