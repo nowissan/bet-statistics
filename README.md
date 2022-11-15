@@ -60,8 +60,3 @@ Once upkeep calls a function (requestFirstBLSData), it gets BLS data and transfe
 
 <br>
 <br>
-
-
-note
-send LINK to smart/con (not oracle con)
-then requestFirstBLSData can be callable
