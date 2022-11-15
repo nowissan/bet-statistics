@@ -25,8 +25,8 @@ To make this possible, the power of smart contracts and Chainlink are needed.
 <br>
 
 ## Components
-- Frontend
-- My contract
+- [Frontend](https://github.com/nowissan/bet-statistics-fe)
+- [Bet Statistics contract](https://github.com/nowissan/bet-statistics)
 - Oracle contract
 - Oracle node
     - Automation
