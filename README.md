@@ -41,6 +41,20 @@ To make this possible, the power of smart contracts and Chainlink are needed.
 <br>
 <br>
 
+## Procedure
+- deploy this contract and copy the address
+- edit constants/index.js and set the address to the variable
+- copy abi and set it to constants/abi.json
+- send LINK to the deployed smart contract
+- run frontend (yarn dev)
+- bet from frontend (localhost:3000)
+- set Chainlink Upkeep configuration (first Friday monthly or whenever you'd like to test)
+
+Once upkeep calls the function, it gets BLS data and transfers the rewards to the winners!
+
+<br>
+<br>
+
 ## Reference
 - [BLS data API: curl instruction](https://www.bls.gov/developers/api_unix.htm#unix2)
 
