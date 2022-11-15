@@ -50,7 +50,7 @@ To make this possible, the power of smart contracts and Chainlink are needed.
 - bet from frontend (localhost:3000)
 - set Chainlink Upkeep configuration (first Friday monthly or whenever you'd like to test)
 
-Once upkeep calls the function, it gets BLS data and transfers the rewards to the winners!
+Once upkeep calls a function (requestFirstBLSData), it gets BLS data and transfers the rewards to the winners!
 
 <br>
 <br>
